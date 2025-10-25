@@ -1,7 +1,9 @@
 # Tugas Individu IF5152 - Computer Vision Pipeline
 
 **Nama:** Adril Putra Merin  
+
 **NIM:** 13522068
+
 **Kelas:** IF5152 Computer Vision
 
 ## 📋 Description
@@ -153,7 +155,7 @@ Semua gambar diload dari `skimage.data` library.
 - **SIFT**: default parameters
 
 ### Geometry
-- **Checkerboard**: 9x6 corners
+- **Checkerboard**: 7x7 corners
 - **Rotation**: 30 degrees
 - **Transformations**: rotation, perspective, affine
 

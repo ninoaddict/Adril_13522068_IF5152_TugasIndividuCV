@@ -167,6 +167,8 @@ Semua gambar diload dari `skimage.data` library.
 
 ## 👤 Author
 
-**Adril Putra Merin**  
-NIM: 13522068 
-Email: 13522068@std.stei.itb.ac.id
+<pre>
+  Name  : Adril Putra Merin
+  NIM   : 13522068
+  Email : <a href="mailto:13522068@std.stei.itb.ac.id">13522068@std.stei.itb.ac.id</a>
+</pre>

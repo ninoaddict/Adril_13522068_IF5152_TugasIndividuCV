@@ -1,0 +1,13 @@
+Image,Filter,Parameter,Output_Size
+cameraman,Gaussian,sigma=1.5,"(512, 512)"
+cameraman,Median,kernel_size=5,"(512, 512)"
+cameraman,Sobel,default,"(512, 512)"
+coins,Gaussian,sigma=1.5,"(303, 384)"
+coins,Median,kernel_size=5,"(303, 384)"
+coins,Sobel,default,"(303, 384)"
+checkerboard,Gaussian,sigma=1.5,"(200, 200)"
+checkerboard,Median,kernel_size=5,"(200, 200)"
+checkerboard,Sobel,default,"(200, 200)"
+astronaut,Gaussian,sigma=1.5,"(512, 512)"
+astronaut,Median,kernel_size=5,"(512, 512)"
+astronaut,Sobel,default,"(512, 512)"

@@ -1,0 +1,18 @@
+Transformation Matrices for astronaut
+============================================================
+
+Rotation Matrix (30 degrees):
+[[  0.8660254    0.5        -93.70250337]
+ [ -0.5          0.8660254  162.29749663]]
+
+Perspective Transform Matrix:
+[[ 1.55531467e+00  3.34994035e-01 -8.37480806e+01]
+ [-1.03828719e-01  1.55152096e+00  3.52889355e+01]
+ [ 5.36861246e-04  9.97848290e-04  1.00000000e+00]]
+
+Affine Transform Matrix:
+[[  1.19417476   0.2184466  -60.63106796]
+ [ -0.12135922   0.97572816  57.2815534 ]]
+
+Camera Matrix: Not computed (no checkerboard detected)
+

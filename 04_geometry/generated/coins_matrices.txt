@@ -1,0 +1,18 @@
+Transformation Matrices for coins
+============================================================
+
+Rotation Matrix (30 degrees):
+[[  0.8660254    0.5        -49.77687753]
+ [ -0.5          0.8660254  116.23016403]]
+
+Perspective Transform Matrix:
+[[ 2.97428918e+00  1.07162600e+00 -1.88416275e+02]
+ [-8.45483828e-02  2.65647524e+00  1.01985008e+01]
+ [ 3.19617473e-03  4.56279403e-03  1.00000000e+00]]
+
+Affine Transform Matrix:
+[[  1.28169014   0.44334975 -76.25199473]
+ [ -0.17605634   0.95073892  61.26587109]]
+
+Camera Matrix: Not computed (no checkerboard detected)
+

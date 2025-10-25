@@ -1,0 +1,17 @@
+Image,Method,Low_Threshold,High_Threshold,Edge_Pixels
+cameraman,Canny,30,90,40237
+cameraman,Canny,50,150,30980
+cameraman,Canny,100,200,19686
+cameraman,Sobel,N/A,N/A,14503
+coins,Canny,30,90,17967
+coins,Canny,50,150,14955
+coins,Canny,100,200,12139
+coins,Sobel,N/A,N/A,13040
+checkerboard,Canny,30,90,2604
+checkerboard,Canny,50,150,2604
+checkerboard,Canny,100,200,2604
+checkerboard,Sobel,N/A,N/A,10416
+astronaut,Canny,30,90,33594
+astronaut,Canny,50,150,26786
+astronaut,Canny,100,200,20556
+astronaut,Sobel,N/A,N/A,21117

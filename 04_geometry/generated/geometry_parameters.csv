@@ -1,0 +1,5 @@
+Image,Calibration_Success,Corners_Detected,Focal_X,Focal_Y,Principal_Point_X,Principal_Point_Y
+cameraman,False,False,N/A,N/A,N/A,N/A
+coins,False,False,N/A,N/A,N/A,N/A
+checkerboard,True,True,4692882.733409566,4692882.812878616,99.50000607017286,99.50000507915667
+astronaut,False,False,N/A,N/A,N/A,N/A

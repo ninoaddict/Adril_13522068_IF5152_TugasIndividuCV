@@ -26,26 +26,34 @@ class CameraGeometry:
         }
         return images
 
+    def to_gray_scale(self, image):
+        if len(image.shape) == 3:
+            final_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        else:
+            final_image = image
+        return final_image
+
+    def to_uint8_img(self, image):
+        img_uint8 = (
+            (image * 255).astype(np.uint8)
+            if image.max() <= 1
+            else image.astype(np.uint8)
+        )
+        return img_uint8
+
     def detect_checkerboard_corners(self, image, pattern_size=(7, 7)):
         """Detect corners in checkerboard pattern"""
-        if len(image.shape) == 3:
-            gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            gray = image
-
-        if gray.max() <= 1:
-            gray = (gray * 255).astype(np.uint8)
-        else:
-            gray = gray.astype(np.uint8)
+        image_gray = self.to_gray_scale(image)
+        image_gray = self.to_uint8_img(image_gray)
 
         # Find checkerboard corners
-        ret, corners = cv2.findChessboardCorners(gray, pattern_size, None)
+        ret, corners = cv2.findChessboardCorners(image_gray, pattern_size, None)
 
         if ret:
             # Refine corner locations
             criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
             corners_refined = cv2.cornerSubPix(
-                gray, corners, (11, 11), (-1, -1), criteria
+                image_gray, corners, (11, 11), (-1, -1), criteria
             )
             return ret, corners_refined
 
@@ -71,29 +79,19 @@ class CameraGeometry:
         img_points = [corners]
 
         # Camera calibration
-        if len(image.shape) == 3:
-            gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            gray = image
-
-        if gray.max() <= 1:
-            gray = (gray * 255).astype(np.uint8)
+        image_gray = self.to_gray_scale(image)
+        image_gray = self.to_uint8_img(image_gray)
 
         ret, camera_matrix, dist_coeffs, rvecs, tvecs = cv2.calibrateCamera(
-            obj_points, img_points, gray.shape[::-1], None, None
+            obj_points, img_points, image_gray.shape[::-1], None, None
         )
 
         return camera_matrix, dist_coeffs, corners
 
     def apply_perspective_transform(self, image, transform_type="rotation"):
         """Apply perspective transformation"""
-        if len(image.shape) == 3:
-            img = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            img = image
-
-        if img.max() <= 1:
-            img = (img * 255).astype(np.uint8)
+        img = self.to_gray_scale(image)
+        img = self.to_uint8_img(img)
 
         h, w = img.shape
 
@@ -132,11 +130,7 @@ class CameraGeometry:
         if len(image.shape) == 3:
             img_with_corners = image.copy()
         else:
-            img_with_corners = (
-                image.astype(np.uint8)
-                if image.max() > 1
-                else (image * 255).astype(np.uint8)
-            )
+            img_with_corners = self.to_uint8_img(image)
             img_with_corners = cv2.cvtColor(img_with_corners, cv2.COLOR_GRAY2RGB)
 
         if corners is not None:
@@ -225,10 +219,7 @@ class CameraGeometry:
         affine_trans, affine_matrix = self.apply_perspective_transform(image, "affine")
 
         # Visualize transformations
-        if len(image.shape) == 3:
-            img_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            img_gray = image
+        img_gray = self.to_gray_scale(image)
         self.visualize_transformations(
             img_gray, rotated, perspective, affine_trans, image_name
         )

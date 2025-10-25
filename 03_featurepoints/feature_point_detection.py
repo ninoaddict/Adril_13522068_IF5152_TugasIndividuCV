@@ -26,23 +26,34 @@ class FeaturePointDetection:
         }
         return images
 
+    def to_gray_scale(self, image):
+        if len(image.shape) == 3:
+            final_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        else:
+            final_image = image
+        return final_image
+
+    def to_uint8_img(self, image):
+        img_uint8 = (
+            (image * 255).astype(np.uint8)
+            if image.max() <= 1
+            else image.astype(np.uint8)
+        )
+        return img_uint8
+
     def harris_corner_detection(self, image, threshold=0.01):
         """Harris corner detection"""
-        if len(image.shape) == 3:
-            image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            image_gray = image
+        # convert to gray scale feature detection
+        image_gray = self.to_gray_scale(image)
 
-        if image_gray.max() <= 1:
-            image_gray = (image_gray * 255).astype(np.uint8)
-        else:
-            image_gray = image_gray.astype(np.uint8)
+        # normalize to 0-255
+        image_gray = self.to_uint8_img(image_gray)
 
-        # Harris corner detection
+        # harris corner detection
         harris_response = cv2.cornerHarris(image_gray.astype(np.float32), 2, 3, 0.04)
         harris_response = cv2.dilate(harris_response, None)
 
-        # Threshold for corner detection
+        # threshold for corner detection
         threshold_value = threshold * harris_response.max()
         corners = np.argwhere(harris_response > threshold_value)
 
@@ -50,42 +61,34 @@ class FeaturePointDetection:
 
     def fast_feature_detection(self, image, threshold=10):
         """FAST feature detection"""
-        if len(image.shape) == 3:
-            image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            image_gray = image
+        # convert to gray scale feature detection
+        image_gray = self.to_gray_scale(image)
 
-        if image_gray.max() <= 1:
-            image_gray = (image_gray * 255).astype(np.uint8)
-        else:
-            image_gray = image_gray.astype(np.uint8)
+        # normalize to 0-255
+        image_gray = self.to_uint8_img(image_gray)
 
         # FAST detector
         fast = cv2.FastFeatureDetector_create(threshold=threshold)
         keypoints = fast.detect(image_gray, None)
 
-        # Convert keypoints to array
+        # convert keypoints to array
         points = np.array([kp.pt for kp in keypoints])
 
         return points, keypoints
 
     def sift_feature_detection(self, image):
         """SIFT feature detection"""
-        if len(image.shape) == 3:
-            image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            image_gray = image
+        # convert to gray scale feature detection
+        image_gray = self.to_gray_scale(image)
 
-        if image_gray.max() <= 1:
-            image_gray = (image_gray * 255).astype(np.uint8)
-        else:
-            image_gray = image_gray.astype(np.uint8)
+        # normalize to 0-255
+        image_gray = self.to_uint8_img(image_gray)
 
         # SIFT detector
         sift = cv2.SIFT_create()
         keypoints, descriptors = sift.detectAndCompute(image_gray, None)
 
-        # Convert keypoints to array
+        # convert keypoints to array
         points = np.array([kp.pt for kp in keypoints])
 
         return points, keypoints, descriptors

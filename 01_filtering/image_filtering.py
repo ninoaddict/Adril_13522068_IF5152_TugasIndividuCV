@@ -30,14 +30,25 @@ class ImageFiltering:
         }
         return images
 
+    def to_gray_scale(self, image):
+        if len(image.shape) == 3:
+            final_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        else:
+            final_image = image
+        return final_image
+
+    def to_uint8_img(self, image):
+        img_uint8 = (
+            (image * 255).astype(np.uint8)
+            if image.max() <= 1
+            else image.astype(np.uint8)
+        )
+        return img_uint8
+
     def gaussian_filter(self, image, sigma=1.0, to_gray_scale=True):
         # gaussian filter works just fine with rgb space to gray scale is not compulsory
         if to_gray_scale:
-            if len(image.shape) == 3:
-                # convert to grayscale if color
-                final_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-            else:
-                final_image = image
+            final_image = self.to_gray_scale(image)
         else:
             final_image = image
 
@@ -47,20 +58,12 @@ class ImageFiltering:
     def median_filter(self, image, size=5, to_gray_scale=True):
         # it is recommended to use gray scale with median filter
         if to_gray_scale:
-            if len(image.shape) == 3:
-                # convert to grayscale if color
-                final_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-            else:
-                final_image = image
+            final_image = self.to_gray_scale(image)
         else:
             final_image = image
 
         # convert to uint8 for cv2.medianBlur
-        img_uint8 = (
-            (final_image * 255).astype(np.uint8)
-            if final_image.max() <= 1
-            else final_image.astype(np.uint8)
-        )
+        img_uint8 = self.to_uint8_img(final_image)
         filtered = cv2.medianBlur(img_uint8, size)
         # normalized back to [0, 1] for consistency
         return filtered / 255.0
@@ -69,13 +72,7 @@ class ImageFiltering:
         # sobel filter should use gray scale image since it's a detection technique
         # that finds where intensity changes rapidly in image and gradient in RGB space
         # is not clearly defined
-        """Apply Sobel filter for edge enhancement"""
-        if len(image.shape) == 3:
-            # convert to grayscale if color
-            image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            image_gray = image
-
+        image_gray = self.to_gray_scale(image)
         # find horizontal edge
         sobel_x = filters.sobel_h(image_gray)
         # find vertical edge

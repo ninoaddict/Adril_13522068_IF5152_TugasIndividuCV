@@ -26,19 +26,31 @@ class EdgeDetection:
         }
         return images
 
-    def sobel_edge(self, image):
-        """Sobel edge detection"""
+    def to_gray_scale(self, image):
         if len(image.shape) == 3:
-            image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+            final_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         else:
-            image_gray = image
+            final_image = image
+        return final_image
+
+    def to_uint8_img(self, image):
+        img_uint8 = (
+            (image * 255).astype(np.uint8)
+            if image.max() <= 1
+            else image.astype(np.uint8)
+        )
+        return img_uint8
+
+    def sobel_edge(self, image, ksize=3):
+        """Sobel edge detection"""
+        # convert to gray scale edge detection
+        image_gray = self.to_gray_scale(image)
 
         # normalize to 0-255
-        if image_gray.max() <= 1:
-            image_gray = (image_gray * 255).astype(np.uint8)
+        image_gray = self.to_uint8_img(image_gray)
 
-        sobel_x = cv2.Sobel(image_gray, cv2.CV_64F, 1, 0, ksize=3)
-        sobel_y = cv2.Sobel(image_gray, cv2.CV_64F, 0, 1, ksize=3)
+        sobel_x = cv2.Sobel(image_gray, cv2.CV_64F, 1, 0, ksize=ksize)
+        sobel_y = cv2.Sobel(image_gray, cv2.CV_64F, 0, 1, ksize=ksize)
         sobel_combined = np.sqrt(sobel_x**2 + sobel_y**2)
         sobel_combined = (sobel_combined / sobel_combined.max() * 255).astype(np.uint8)
 
@@ -46,14 +58,11 @@ class EdgeDetection:
 
     def canny_edge(self, image, low_threshold=50, high_threshold=150):
         """Canny edge detection"""
-        if len(image.shape) == 3:
-            image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            image_gray = image
+        # convert to gray scale edge detection
+        image_gray = self.to_gray_scale(image)
 
         # normalize to 0-255
-        if image_gray.max() <= 1:
-            image_gray = (image_gray * 255).astype(np.uint8)
+        image_gray = self.to_uint8_img(image_gray)
 
         edges = cv2.Canny(image_gray, low_threshold, high_threshold)
         return edges
@@ -136,15 +145,12 @@ class EdgeDetection:
         """Analyze effect of image sampling on edge detection"""
         print(f"\nAnalyzing sampling effect on {image_name}...")
 
-        if len(image.shape) == 3:
-            image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        else:
-            image_gray = image
+        # convert to gray scale edge detection
+        image_gray = self.to_gray_scale(image)
 
-        if image_gray.max() <= 1:
-            image_gray = (image_gray * 255).astype(np.uint8)
+        # normalize to 0-255
+        image_gray = self.to_uint8_img(image_gray)
 
-        sampling_results = {}
         sampling_factors = [1, 2, 4]
 
         fig, axes = plt.subplots(len(sampling_factors), 3, figsize=(12, 12))

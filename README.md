@@ -47,8 +47,7 @@ Aplikasi Computer Vision terintegrasi yang menerapkan materi minggu 3-6:
 │       ├── *_transformations.png
 │       ├── *_matrices.txt
 │       └── geometry_parameters.csv
-├── 05_laporan/
-│   ├── laporan.pdf
+├── 05_laporan.pdf
 ├── README.md
 └── main.py
 ```
